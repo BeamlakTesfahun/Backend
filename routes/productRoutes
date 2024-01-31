@@ -1,0 +1,15 @@
+const express = require("express");
+const router = express.Router();
+const { productValidator } = require("../middleware/productValidator");
+const {
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} = require("../controllers/productController");
+
+router.get("/", getProduct);
+router.post("/", productValidator, createProduct);
+router.put("/:id", updateProduct);
+router.delete("/:id", deleteProduct);
+module.exports = router;
