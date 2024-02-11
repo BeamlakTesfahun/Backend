@@ -13,6 +13,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 
 const getProduct = async (req, res) => {
   //console.log("body data", req.body);
+
   const products = await Product.find({ user: req.user.id });
   res.status(200).json({ products });
 };
@@ -28,6 +29,8 @@ const createProduct = async (req, res) => {
     user: req.user.id,
     title: req.body.title,
     description: req.body.description,
+    price: req.body.price,
+    quantity: req.body.quantity,
   });
   res.status(200).json({ products });
 };
@@ -43,7 +46,7 @@ const updateProduct = async (req, res) => {
     res.status(401).json({ error: "User not found" });
   }
   // if the id of the user sending the request and the id on the product do not match??
-  if (product.user.toString() !== user.id) {
+  if (product.user && product.user.toString() !== user.id) {
     res.status(401).json({ error: "User not authorized" });
   }
 
@@ -56,6 +59,7 @@ const updateProduct = async (req, res) => {
   );
   res.status(200).json({ updatedProduct });
 };
+
 const deleteProduct = async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
@@ -70,7 +74,7 @@ const deleteProduct = async (req, res) => {
     res.status(401).json({ error: "User not authorized" });
   }
 
-  const deletedProduct = await Product.findByIdAndRemove(req.params.id);
+  //const deletedProduct = await Product.findByIdAndRemove(req.params.id);
   res.status(200).json({ message: "Deleted successfully" });
 };
 
